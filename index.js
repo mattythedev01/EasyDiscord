@@ -100,43 +100,29 @@ async function EasyDiscord() {
           execSync(`git clone ${repoUrl} ${targetDir}`, { stdio: "inherit" });
           console.log(colors.green("Template downloaded successfully!"));
 
-          // Create .env file
-          const envPath = path.join(targetDir, ".env");
-          let envContent;
-          if (selectedOption === "TypeScript") {
-            envContent = `TOKEN=YOUR_BOT_TOKEN_HERE
+          // Create .env file only for TypeScript and JavaScript
+          if (
+            selectedOption === "TypeScript" ||
+            selectedOption === "JavaScript"
+          ) {
+            const envPath = path.join(targetDir, ".env");
+            let envContent;
+            if (selectedOption === "TypeScript") {
+              envContent = `TOKEN=YOUR_BOT_TOKEN_HERE
 CLIENT_ID=YOUR_BOT_CLIENT_ID
 PREFIX=!
 MONGO_URI=YOUR_MONGO_CONNECTION_STRING
 MONGO_DATABASE_NAME=YOUR_DATABASE_NAME`;
-          } else if (selectedOption === "JavaScript") {
-            envContent = `DISCORD_TOKEN=YOUR_BOT_TOKEN_HERE
+            } else {
+              envContent = `DISCORD_TOKEN=YOUR_BOT_TOKEN_HERE
 MONGODB_URI=YOUR_MONGO_CONNECTION_STRING`;
-          } else if (selectedOption === "Python") {
-            envContent = `TOKEN=YOUR_BOT_TOKEN_HERE
-PREFIX=!
-OWNERS=YOUR_DISCORD_USER_ID
-MONGO_CONNECTION_STRING=YOUR_MONGO_CONNECTION_STRING`;
-          } else if (selectedOption === "C#") {
-            envContent = `Token=YOUR_BOT_TOKEN_HERE
-Prefix=!
-ConnectionString=YOUR_DATABASE_CONNECTION_STRING`;
-          } else if (selectedOption === "Java") {
-            envContent = `BOT_TOKEN=YOUR_BOT_TOKEN_HERE`;
-          } else if (selectedOption === "Go") {
-            envContent = `BOT_TOKEN=YOUR_BOT_TOKEN_HERE`;
-          } else if (selectedOption === "Kotlin") {
-            envContent = `BOT_TOKEN=YOUR_BOT_TOKEN_HERE`;
-          } else if (selectedOption === "Ruby") {
-            envContent = `BOT_TOKEN=YOUR_BOT_TOKEN_HERE`;
-          } else {
-            envContent = `DISCORD_TOKEN=YOUR_BOT_TOKEN_HERE`;
-          }
+            }
 
-          fs.writeFileSync(envPath, envContent);
-          console.log(
-            colors.green(".env file created with required variables.")
-          );
+            fs.writeFileSync(envPath, envContent);
+            console.log(
+              colors.green(".env file created with required variables.")
+            );
+          }
 
           // Install dependencies
           console.log(colors.green("\nInstalling dependencies..."));
@@ -167,11 +153,16 @@ ConnectionString=YOUR_DATABASE_CONNECTION_STRING`;
           );
           console.log(colors.yellow("\nNext steps:"));
           console.log(colors.yellow("1. cd discord-bot"));
-          console.log(
-            colors.yellow(
-              "2. Update the .env file with your bot token and other credentials"
-            )
-          );
+          if (
+            selectedOption === "TypeScript" ||
+            selectedOption === "JavaScript"
+          ) {
+            console.log(
+              colors.yellow(
+                "2. Update the .env file with your bot token and other credentials"
+              )
+            );
+          }
           if (selectedOption === "Python") {
             console.log(
               colors.yellow(
